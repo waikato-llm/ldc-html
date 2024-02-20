@@ -99,7 +99,7 @@ class HtmlPretrainReader(PretrainReader):
         meta = dict()
         meta["file"] = self.session.current_input
         yield PretrainData(
-            content=soup.get_text(),
+            content=soup.body.get_text(),
             meta=meta,
         )
 
