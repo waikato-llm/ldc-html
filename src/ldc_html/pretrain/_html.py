@@ -14,6 +14,7 @@ class HtmlPretrainReader(PretrainReader):
     """
 
     def __init__(self, source: Union[str, List[str]] = None, source_list: Union[str, List[str]] = None,
+                 separator: str = None,
                  logger_name: str = None, logging_level: str = LOGGING_WARNING):
         """
         Initializes the reader.
@@ -28,6 +29,7 @@ class HtmlPretrainReader(PretrainReader):
         super().__init__(logger_name=logger_name, logging_level=logging_level)
         self.source = source
         self.source_list = source_list
+        self.separator = separator
         self._inputs = None
         self._current_input = None
 
@@ -59,6 +61,7 @@ class HtmlPretrainReader(PretrainReader):
         parser = super()._create_argparser()
         parser.add_argument("-i", "--input", type=str, help="Path to the HTML file(s) to read; glob syntax is supported", required=False, nargs="*")
         parser.add_argument("-I", "--input_list", type=str, help="Path to the text file(s) listing the HTML files to use", required=False, nargs="*")
+        parser.add_argument("-s", "--separator", type=str, help="The separator to use for concatenating the text; \\n, \\r and \\t get automatically converted", required=False, default=None)
         return parser
 
     def _apply_args(self, ns: argparse.Namespace):
@@ -71,6 +74,7 @@ class HtmlPretrainReader(PretrainReader):
         super()._apply_args(ns)
         self.source = ns.input
         self.source_list = ns.input_list
+        self.separator = ns.separator
 
     def initialize(self):
         """
@@ -78,6 +82,9 @@ class HtmlPretrainReader(PretrainReader):
         """
         super().initialize()
         self._inputs = locate_files(self.source, input_lists=self.source_list, fail_if_empty=True)
+        if self.separator is None:
+            self.separator = ""
+        self.separator = self.separator.replace("\\n", "\n").replace("\\r", "\r").replace("\\t", "\t")
 
     def read(self) -> Iterable[PretrainData]:
         """
@@ -99,7 +106,7 @@ class HtmlPretrainReader(PretrainReader):
         meta = dict()
         meta["file"] = self.session.current_input
         yield PretrainData(
-            content=soup.body.get_text(),
+            content=soup.body.get_text(separator=self.separator),
             meta=meta,
         )
 

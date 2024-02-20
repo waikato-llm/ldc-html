@@ -8,7 +8,7 @@ Extracts text from HTML files to use for pretraining.
 ```
 usage: from-html-pt [-h] [-l {DEBUG,INFO,WARNING,ERROR,CRITICAL}]
                     [-N LOGGER_NAME] [-i [INPUT [INPUT ...]]]
-                    [-I [INPUT_LIST [INPUT_LIST ...]]]
+                    [-I [INPUT_LIST [INPUT_LIST ...]]] [-s SEPARATOR]
 
 Extracts text from HTML files to use for pretraining.
 
@@ -25,4 +25,7 @@ optional arguments:
   -I [INPUT_LIST [INPUT_LIST ...]], --input_list [INPUT_LIST [INPUT_LIST ...]]
                         Path to the text file(s) listing the HTML files to use
                         (default: None)
+  -s SEPARATOR, --separator SEPARATOR
+                        The separator to use for concatenating the text; \n,
+                        \r and \t get automatically converted (default: None)
 ```
