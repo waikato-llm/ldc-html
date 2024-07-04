@@ -81,7 +81,7 @@ class HtmlPretrainReader(PretrainReader):
         Initializes the reading, e.g., for opening files or databases.
         """
         super().initialize()
-        self._inputs = locate_files(self.source, input_lists=self.source_list, fail_if_empty=True)
+        self._inputs = locate_files(self.source, input_lists=self.source_list, fail_if_empty=True, default_glob="*.html")
         if self.separator is None:
             self.separator = ""
         self.separator = self.separator.replace("\\n", "\n").replace("\\r", "\r").replace("\\t", "\t")
