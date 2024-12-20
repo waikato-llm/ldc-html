@@ -13,7 +13,7 @@ def _read(f):
 
 
 setup(
-    name="ldc-html",
+    name="ldc_html",
     description="Python3 library that adds HTML support to the llm-dataset-converter library.",
     long_description=(
             _read('DESCRIPTION.rst') + b'\n' +
