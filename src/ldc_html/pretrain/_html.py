@@ -4,11 +4,12 @@ from typing import Iterable, List, Union
 from bs4 import BeautifulSoup
 from wai.logging import LOGGING_WARNING
 from seppl.io import locate_files
+from seppl.placeholders import PlaceholderSupporter, placeholder_list
 from ldc.core import domain_suffix
 from ldc.api.pretrain import PretrainData, PretrainReader
 
 
-class HtmlPretrainReader(PretrainReader):
+class HtmlPretrainReader(PretrainReader, PlaceholderSupporter):
     """
     Extracts text from HTML files to use for pretraining.
     """
@@ -59,8 +60,8 @@ class HtmlPretrainReader(PretrainReader):
         :rtype: argparse.ArgumentParser
         """
         parser = super()._create_argparser()
-        parser.add_argument("-i", "--input", type=str, help="Path to the HTML file(s) to read; glob syntax is supported", required=False, nargs="*")
-        parser.add_argument("-I", "--input_list", type=str, help="Path to the text file(s) listing the HTML files to use", required=False, nargs="*")
+        parser.add_argument("-i", "--input", type=str, help="Path to the HTML file(s) to read; glob syntax is supported; " + placeholder_list(obj=self), required=False, nargs="*")
+        parser.add_argument("-I", "--input_list", type=str, help="Path to the text file(s) listing the HTML files to use; " + placeholder_list(obj=self), required=False, nargs="*")
         parser.add_argument("-s", "--separator", type=str, help="The separator to use for concatenating the text; \\n, \\r and \\t get automatically converted", required=False, default=None)
         return parser
 
